@@ -1,0 +1,89 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Least privilege: this workflow only ever reads the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '22']
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # No dependencies by design: the engines are plain ES modules and the
+      # test runner ships with Node. Nothing to install, nothing to audit.
+      - name: Assert the project has no runtime dependencies
+        run: |
+          node -e "
+            const pkg = require('./package.json');
+            for (const field of ['dependencies', 'devDependencies']) {
+              if (pkg[field] && Object.keys(pkg[field]).length > 0) {
+                console.error('Unexpected ' + field + ': this project must stay dependency-free.');
+                process.exit(1);
+              }
+            }
+          "
+
+      - name: Run tests
+        run: npm test
+
+      # There is no browser in CI either, so this boots site/app.js against a
+      # minimal stub DOM with the real data files. It cannot prove the site
+      # looks right; it does prove no render path throws on load.
+      - name: Headless UI smoke test
+        run: npm run smoke
+
+  data-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Every shipped JSON file must parse
+        run: |
+          for file in $(find site/data -name '*.json'); do
+            node -e "JSON.parse(require('fs').readFileSync('$file','utf8'))" \
+              || { echo "::error file=$file::invalid JSON"; exit 1; }
+            echo "ok: $file"
+          done
+
+      - name: No snapshot may claim a provenance it does not have
+        run: |
+          node -e "
+            const fs = require('fs');
+            const dir = 'site/data/snapshots';
+            let failed = false;
+            for (const file of fs.readdirSync(dir)) {
+              const raw = JSON.parse(fs.readFileSync(dir + '/' + file, 'utf8'));
+              if (!/user-transcribed/.test(raw.source.provenance)) {
+                console.error('::error file=' + dir + '/' + file + '::provenance must stay honest until a real fetch pipeline exists');
+                failed = true;
+              }
+            }
+            process.exit(failed ? 1 : 0);
+          "

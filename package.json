@@ -1,0 +1,16 @@
+{
+  "name": "ekodiff",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "EkoDiff + Akademik Zaman Makinesi — versioned curriculum snapshots and a local-first what-if engine for BUU Econometrics students.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "smoke": "node tools/dom-smoke.mjs",
+    "verify": "npm test && npm run smoke"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

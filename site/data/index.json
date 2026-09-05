@@ -1,0 +1,23 @@
+{
+  "generated_note": "Elle bakımı yapılan manifest. HTTP üzerinden dizin listelenemediği için tarayıcının hangi dosyaların var olduğunu buradan öğrenmesi gerekir. tests/data.test.js bu listenin diskteki dosyalarla birebir aynı olmasını zorunlu kılar.",
+  "rules": "data/rules/assessment.json",
+  "snapshots": [
+    {
+      "id": "2026-2027-zorunlu",
+      "file": "data/snapshots/2026-2027-zorunlu.json",
+      "label": "2026-2027 — Zorunlu dersler",
+      "default_to": true
+    },
+    {
+      "id": "2018-2019-zorunlu",
+      "file": "data/snapshots/2018-2019-zorunlu.json",
+      "label": "2018-2019 — Zorunlu dersler (arşiv, kısmi)",
+      "default_from": true
+    },
+    {
+      "id": "2026-2027-secmeli-veri",
+      "file": "data/snapshots/2026-2027-secmeli-veri.json",
+      "label": "2026-2027 — Yazılım/veri seçmelileri (kısmi)"
+    }
+  ]
+}
