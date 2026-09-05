@@ -1,0 +1,50 @@
+{
+  "snapshot_id": "2026-2027-secmeli-veri",
+  "label": "2026-2027 — Yazılım/veri odaklı seçmeliler (kısmi havuz)",
+  "scope": "BUÜ İİBF Ekonometri lisans programı — yazılım/veri odaklı seçmeli dersler",
+  "completeness": "partial",
+  "covered_fields": ["title", "ects", "semester", "category"],
+  "source": {
+    "url": "https://uludag.edu.tr/ekonometri",
+    "fetched_at": "2026-09-05T00:00:00Z",
+    "provenance": "user-transcribed",
+    "note": "Bilgi Paketi seçmeli havuzu listelerinden aktarıldı. Havuzun tamamı değil, yazılım/veri odaklı alt kümesidir."
+  },
+  "notes": [
+    "Bu snapshot KASITLI olarak eksiktir: seçmeli havuzunun tamamını değil, yalnızca yazılım/veri odaklı alt kümesini kapsar. 3.–8. yarıyıllarda her dönem 10 AKTS = 2 seçmeli, toplam 12 seçmeli / 60 AKTS alınır.",
+    "AKTS değerleri 'her dönem 10 AKTS = 2 ders' ifadesinden 5 olarak türetilmiştir; ders bazında tek tek doğrulanmamıştır.",
+    "EKO3310 dersinin adı kaynakta 'PYHTON UYGULAMALARI' olarak yazım hatalı geçiyor. Kaynağa sadık kalınmış, düzeltilmemiştir.",
+    "Müfredatta SQL, veritabanı ve veri mühendisliği/pipeline konularını adıyla taşıyan hiçbir ders bulunmamaktadır — bu snapshot'ın gösterdiği en önemli boşluk budur.",
+    "EKO3306/IKT3306 kodu 6. yarıyıl seçmelilerinde hem 'İktisadi Planlama' hem 'Doğal Kaynaklar Ekonomisi' için tekrar ediyor; belirsizlik nedeniyle ikisi de bu snapshot'a alınmadı."
+  ],
+  "courses": [
+    { "code": "EKO2206", "title": "Nicel Veri Analizi", "ects": 5, "semester": 4, "category": "seçmeli" },
+    { "code": "EKO2210", "title": "Parametrik Olmayan İstatistik", "ects": 5, "semester": 4, "category": "seçmeli" },
+
+    { "code": "EKO3001", "title": "R ile İstatistiksel Analiz", "ects": 5, "semester": 5, "category": "seçmeli" },
+    { "code": "EKO3105", "title": "Ekonometrik Programlama", "ects": 5, "semester": 5, "category": "seçmeli" },
+    { "code": "EKO3203", "title": "İstatistiksel Paket Programları", "ects": 5, "semester": 5, "category": "seçmeli" },
+    { "code": "EKO3205", "title": "Nitel Veri Analizi", "ects": 5, "semester": 5, "category": "seçmeli" },
+    { "code": "EKO3311", "title": "Programlamaya Giriş", "ects": 5, "semester": 5, "category": "seçmeli" },
+    { "code": "EKO3209", "title": "Finansal İstatistik", "ects": 5, "semester": 5, "category": "seçmeli" },
+
+    { "code": "EKO3002", "title": "R ile Ekonometrik Analiz", "ects": 5, "semester": 6, "category": "seçmeli" },
+    { "code": "EKO3310", "title": "PYHTON UYGULAMALARI", "ects": 5, "semester": 6, "category": "seçmeli" },
+    { "code": "EKO3010", "title": "İleri Excel", "ects": 5, "semester": 6, "category": "seçmeli" },
+    { "code": "EKO3108", "title": "Ekonometrik Yazılım Geliştirme", "ects": 5, "semester": 6, "category": "seçmeli" },
+    { "code": "EKO3204", "title": "İstatistiksel Süreç Kontrolü", "ects": 5, "semester": 6, "category": "seçmeli" },
+
+    { "code": "EKO4111", "title": "Zaman Serileri Analizi", "ects": 5, "semester": 7, "category": "seçmeli" },
+    { "code": "EKO4113", "title": "Uygulamalı Ekonometri", "ects": 5, "semester": 7, "category": "seçmeli" },
+    { "code": "EKO4107", "title": "Tahmin Teknikleri", "ects": 5, "semester": 7, "category": "seçmeli" },
+    { "code": "EKO4205", "title": "Genelleştirilmiş Doğrusal Modeller", "ects": 5, "semester": 7, "category": "seçmeli" },
+    { "code": "EKO4207", "title": "Kategorik Veri Analizi", "ects": 5, "semester": 7, "category": "seçmeli" },
+    { "code": "EKO4211", "title": "Risk Analizi", "ects": 5, "semester": 7, "category": "seçmeli" },
+
+    { "code": "EKO4006", "title": "MATLAB Uygulamaları", "ects": 5, "semester": 8, "category": "seçmeli" },
+    { "code": "EKO4118", "title": "Panel Veri Ekonometrisi", "ects": 5, "semester": 8, "category": "seçmeli" },
+    { "code": "EKO4114", "title": "Sınırlı Bağımlı Değişkenli Modeller", "ects": 5, "semester": 8, "category": "seçmeli" },
+    { "code": "EKO4110", "title": "Eşanlı Denklem Modelleri", "ects": 5, "semester": 8, "category": "seçmeli" },
+    { "code": "EKO4214", "title": "Organizasyonel Ağ Analizi", "ects": 5, "semester": 8, "category": "seçmeli" }
+  ]
+}

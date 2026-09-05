@@ -1,0 +1,70 @@
+{
+  "snapshot_id": "2026-2027-zorunlu",
+  "label": "2026-2027 — Zorunlu dersler (güncel Bilgi Paketi)",
+  "scope": "BUÜ İİBF Ekonometri lisans programı — zorunlu dersler, 1.–8. yarıyıl",
+  "completeness": "full",
+  "covered_fields": ["title", "ects", "semester", "category"],
+  "source": {
+    "url": "https://uludag.edu.tr/ekonometri",
+    "fetched_at": "2026-09-05T00:00:00Z",
+    "provenance": "user-transcribed",
+    "note": "BUÜ Bilgi Paketi & Ders Kataloğu program sayfasından Umut tarafından yapıştırılan metinden aktarıldı. Otomatik fetch yapılmadı; sayfa o tarihten sonra değişmiş olabilir."
+  },
+  "notes": [
+    "Teori/uygulama saatleri bilinçli olarak covered_fields dışında bırakıldı: çoğu ders için 3+0 olduğu belirtiliyor, ancak her ders için tek tek doğrulanmadı.",
+    "Yarıyıl AKTS toplamları 31+30+(20+10)×6 = 241 iken program 240 AKTS ilan ediyor. Fark EKO1003 Kariyer Planlama'nın 1 AKTS'sinden geliyor. Kaynaklar arası uyuşmazlık olarak kayıtlıdır.",
+    "EKO2004 kodu aynı katalogda hem zorunlu 'Bilgisayar Programlama ve VBA Uygulamaları' hem 4. yarıyıl seçmeli 'Ofis Programları - Kelime İşlem' için kullanılıyor.",
+    "EKO4305 kodu hem zorunlu 'Benzetim' hem 7. yarıyıl seçmeli 'Yöneylem Araştırması Bilgisayar Uygulamaları' için kullanılıyor.",
+    "Doğrulanabilen tek önkoşul zinciri: EKO3101 + EKO3102 → EKO4102. Diğer dersler için 'önkoşulu yok' sonucu çıkarılmamalıdır."
+  ],
+  "courses": [
+    { "code": "EKO1001", "title": "Matematik I", "ects": 5, "semester": 1, "category": "zorunlu" },
+    { "code": "EKO1003", "title": "Kariyer Planlama", "ects": 1, "semester": 1, "category": "zorunlu" },
+    { "code": "IKT1001", "title": "İktisat I", "ects": 5, "semester": 1, "category": "zorunlu" },
+    { "code": "ISL1003", "title": "İşletme", "ects": 5, "semester": 1, "category": "zorunlu" },
+    { "code": "ISL1201", "title": "Muhasebe I", "ects": 5, "semester": 1, "category": "zorunlu" },
+    { "code": "KAM1201", "title": "Hukuka Giriş", "ects": 4, "semester": 1, "category": "zorunlu" },
+    { "code": "ATA101", "title": "Atatürk İlkeleri ve İnkılap Tarihi I", "ects": 2, "semester": 1, "category": "zorunlu" },
+    { "code": "TUD101", "title": "Türk Dili I", "ects": 2, "semester": 1, "category": "zorunlu" },
+    { "code": "YAD101", "title": "Yabancı Dil I (İngilizce)", "ects": 2, "semester": 1, "category": "zorunlu" },
+
+    { "code": "CAL1102", "title": "Sosyal Politika", "ects": 4, "semester": 2, "category": "zorunlu" },
+    { "code": "EKO1002", "title": "Matematik II", "ects": 5, "semester": 2, "category": "zorunlu" },
+    { "code": "EKO1202", "title": "Betimsel İstatistik", "ects": 5, "semester": 2, "category": "zorunlu" },
+    { "code": "IKT1002", "title": "İktisat II", "ects": 5, "semester": 2, "category": "zorunlu" },
+    { "code": "ISL1202", "title": "Muhasebe II", "ects": 5, "semester": 2, "category": "zorunlu" },
+    { "code": "ATA102", "title": "Atatürk İlkeleri ve İnkılap Tarihi II", "ects": 2, "semester": 2, "category": "zorunlu" },
+    { "code": "TUD102", "title": "Türk Dili II", "ects": 2, "semester": 2, "category": "zorunlu" },
+    { "code": "YAD102", "title": "Yabancı Dil II (İngilizce)", "ects": 2, "semester": 2, "category": "zorunlu" },
+
+    { "code": "EKO2005", "title": "Doğrusal Cebir", "ects": 5, "semester": 3, "category": "zorunlu" },
+    { "code": "EKO2201", "title": "Çıkarımsal İstatistik", "ects": 5, "semester": 3, "category": "zorunlu" },
+    { "code": "EKO2203", "title": "Bilgisayar Destekli İstatistiksel Analiz", "ects": 5, "semester": 3, "category": "zorunlu" },
+    { "code": "IKT2101", "title": "Mikro İktisat", "ects": 5, "semester": 3, "category": "zorunlu" },
+
+    { "code": "EKO2004", "title": "Bilgisayar Programlama ve VBA Uygulamaları", "ects": 5, "semester": 4, "category": "zorunlu" },
+    { "code": "EKO2104", "title": "Model Kurma Teknikleri", "ects": 5, "semester": 4, "category": "zorunlu" },
+    { "code": "EKO2202", "title": "İstatistiksel Karar Teorisi", "ects": 5, "semester": 4, "category": "zorunlu" },
+    { "code": "IKT2102", "title": "Makro İktisat", "ects": 5, "semester": 4, "category": "zorunlu" },
+
+    { "code": "EKO3101", "title": "Ekonometri I", "ects": 5, "semester": 5, "category": "zorunlu" },
+    { "code": "EKO3109", "title": "Matematiksel İktisat I", "ects": 5, "semester": 5, "category": "zorunlu" },
+    { "code": "EKO3201", "title": "Matematiksel İstatistik", "ects": 5, "semester": 5, "category": "zorunlu" },
+    { "code": "EKO3301", "title": "Yöneylem Araştırması I", "ects": 5, "semester": 5, "category": "zorunlu" },
+
+    { "code": "EKO3006", "title": "Araştırma Yöntemleri", "ects": 5, "semester": 6, "category": "zorunlu" },
+    { "code": "EKO3102", "title": "Ekonometri II", "ects": 5, "semester": 6, "category": "zorunlu" },
+    { "code": "EKO3112", "title": "Matematiksel İktisat II", "ects": 5, "semester": 6, "category": "zorunlu" },
+    { "code": "EKO3302", "title": "Yöneylem Araştırması II", "ects": 5, "semester": 6, "category": "zorunlu" },
+
+    { "code": "EKO4003", "title": "Güncel Konular", "ects": 5, "semester": 7, "category": "zorunlu" },
+    { "code": "EKO4101", "title": "Ekonometrik Analiz I", "ects": 5, "semester": 7, "category": "zorunlu" },
+    { "code": "EKO4203", "title": "Çok Değişkenli İstatistiksel Teknikler", "ects": 5, "semester": 7, "category": "zorunlu" },
+    { "code": "EKO4305", "title": "Benzetim", "ects": 5, "semester": 7, "category": "zorunlu" },
+
+    { "code": "EKO4102", "title": "Ekonometrik Analiz II", "ects": 5, "semester": 8, "category": "zorunlu" },
+    { "code": "EKO4104", "title": "Finansal Ekonometri", "ects": 5, "semester": 8, "category": "zorunlu" },
+    { "code": "EKO4206", "title": "Örnekleme", "ects": 5, "semester": 8, "category": "zorunlu" },
+    { "code": "EKO4302", "title": "Planlama ve Optimizasyon", "ects": 5, "semester": 8, "category": "zorunlu" }
+  ]
+}
