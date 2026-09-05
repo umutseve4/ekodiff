@@ -2,7 +2,7 @@
  * Absolute (non-relative) assessment rules.
  *
  * Deliberate scope limit, and the most important design decision in this file:
- * this module does NOT convert a raw score into a letter grade. Bursa Uldağ
+ * this module does NOT convert a raw score into a letter grade. Bursa Uludağ
  * Üniversitesi uses relative assessment (bağıl değerlendirme), so the letter
  * depends on the whole cohort's distribution — data a student does not have and
  * this project will never collect. Any tool that pretends otherwise is
