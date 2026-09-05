@@ -50,6 +50,10 @@ jobs:
             echo "enabled=true" >> "$GITHUB_OUTPUT"
           else
             echo "enabled=false" >> "$GITHUB_OUTPUT"
+            # A green run must never be mistaken for a published site. The job
+            # succeeded — the tests really did pass — but nothing was deployed,
+            # so it is annotated rather than left silently green.
+            echo "::warning title=Site not published::All tests passed, but GitHub Pages is switched off, so nothing was deployed. Settings -> Pages -> Source: GitHub Actions, then re-run."
             {
               echo "### Pages is not switched on yet"
               echo ""

@@ -1,5 +1,14 @@
 # EkoDiff + Akademik Zaman Makinesi
 
+[![verify](https://github.com/umutseve4/ekodiff/actions/workflows/verify.yml/badge.svg)](https://github.com/umutseve4/ekodiff/actions/workflows/verify.yml)
+[![lisans: MIT](https://img.shields.io/badge/lisans-MIT-informational)](LICENSE)
+
+> **Yayın durumu:** `pages` iş akışının yeşil olması sitenin yayında olduğu
+> anlamına **gelmez**. GitHub Pages kapalıyken testler geçer, dağıtım adımları
+> atlanır ve koşu bir uyarı ile yeşil biter. Yayına almak için tek seferlik bir
+> el işi gerekir: **Settings → Pages → Source: GitHub Actions**, ardından `pages`
+> iş akışını yeniden çalıştırın. Bir iş akışı jetonunun bunu yapmaya yetkisi yok.
+
 **Bir müfredat sessizce değişir.** Ders kodu taşınır, AKTS kayar, seçmeli havuzu
 yeniden yazılır, eski sayfa yayından kalkar. Geçen yılın planına göre hazırlanmış
 öğrenci bu değişimi hiçbir yerde göremez — çünkü kimse müfredatı sürümlemiyor.
