@@ -36,12 +36,37 @@
       "CC": 2.0,
       "DC": 1.5,
       "DD": 1.0,
-      "FF": 0.0
+      "FD": 0.5,
+      "FF": 0.0,
+      "D": 0.0
     },
     "passing": ["AA", "BA", "BB", "CB", "CC"],
     "conditional": ["DC", "DD"],
-    "failing": ["FF"],
-    "verification": "UNVERIFIED",
-    "verificationNote": "Harf notu → katsayı eşlemesi yaygın Türk 4.00 sistemine göre varsayılmıştır; BUÜ yönetmeliğinden doğrulanmamıştır. Buradan çıkan her ortalama tahminidir."
+    "failing": ["FD", "FF", "D"],
+    "verification": "verified",
+    "verificationNote": "Harf notu → katsayı eşlemesi Bursa Uludağ Üniversitesi Önlisans ve Lisans Eğitim Öğretim Yönetmeliği MADDE 32/(3) tablosundan birebir alınmıştır.",
+    "verifiedAgainst": {
+      "regulation": "Bursa Uludağ Üniversitesi Önlisans ve Lisans Eğitim Öğretim Yönetmeliği",
+      "article": "MADDE 32/(3) — başarı dereceleri, harf notları ve ağırlık katsayıları; MADDE 32/(4)-a — (D) Devamsız işareti",
+      "officialGazette": {
+        "date": "2020-09-20",
+        "number": "31250"
+      },
+      "url": "https://uludag.edu.tr/dosyalar/mennanpasinli/olcute1/Bursa%20Uluda%C4%9F%20%C3%9Cniversitesi%20%C3%96nlisans%20ve%20Lisans%20E%C4%9Fitim%20%C3%96%C4%9Fretim%20Y%C3%B6netmeli%C4%9F.pdf",
+      "consolidatedTextUrl": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=34870&MevzuatTur=8&MevzuatTertip=5",
+      "verified_at": "2026-09-05T00:00:00Z",
+      "provenance": "regulation-text",
+      "note": "Yönetmelik metnindeki tablo doğrudan okundu; dokuz harf notunun tamamı ve (D) işaretinin FF olarak ortalamaya dâhil edilmesi kuralı buradan alındı."
+    },
+    "nonGpaMarks": {
+      "S": "Süren Çalışma — GANO hesabına katılmaz.",
+      "E": "Eksik — 15 gün içinde tamamlanmazsa FF'ye dönüşür.",
+      "G": "Geçer — GANO hesabına katılmaz.",
+      "K": "Kalır — GANO hesabına katılmaz.",
+      "M": "Muaf — GANO hesabına katılmaz.",
+      "İ": "İptal — mezuniyet sonrası transkriptte yer almaz.",
+      "note": "Bu işaretler bilerek katsayı tablosunda değildir: GANO'ya girmezler. Girilirlerse motor onları hesaba katmaz ve nedenini yazar."
+    },
+    "letterGradeNote": "Yönetmelik harf notları için sabit 100'lük puan aralığı tanımlamaz; bağıl değerlendirme uygulanır (MADDE 32/(1)-(2)). Bu yüzden bu proje 100'lük puandan harf notu üretmez — yalnızca kesinleşmiş harf notunu katsayıya çevirir."
   }
 }
