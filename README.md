@@ -6,14 +6,14 @@ yeniden yazılır, eski sayfa yayından kalkar. Geçen yılın planına göre ha
 
 Bu depo iki şey yapar:
 
-1. **EkoDiff** — Bursa Uldağ Üniversitesi İİBF Ekonometri lisans programının
+1. **EkoDiff** — Bursa Uludağ Üniversitesi İİBF Ekonometri lisans programının
    tarihli, kaynak künyeli *sürümlerini* tutar ve iki sürüm arasındaki farkı
    çıkarır.
 2. **Akademik Zaman Makinesi** — tamamen tarayıcıda çalışan bir senaryo motoru:
    "şu dersten DC alırsam ne olur", "3.00 hedefi için kalan AKTS'de hangi
    ortalamayı tutturmam gerekir", "şartlı geçtiğim krediler hâlâ sayılıyor mu".
 
-> **Bu bağımsız bir öğrenci projesidir.** Bursa Uldağ Üniversitesi tarafından
+> **Bu bağımsız bir öğrenci projesidir.** Bursa Uludağ Üniversitesi tarafından
 > hazırlanmamış, onaylanmamış veya desteklenmemiştir. Resmî bilgi için bölüm
 > başkanlığına ve Öğrenci İşleri'ne başvurun. Buradaki hiçbir çıktı resmî
 > transkript, muafiyet veya mezuniyet kararı yerine geçmez.
