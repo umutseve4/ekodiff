@@ -14,7 +14,7 @@ import path from 'node:path';
 
 import { validateSnapshot } from '../site/modules/snapshot.js';
 import { CHANGE, diffSnapshots } from '../site/modules/diff.js';
-import { computeGpa } from '../site/modules/simulate.js';
+import { computeGpa, summarizeProgram } from '../site/modules/simulate.js';
 
 // Data lives under site/ on purpose: GitHub Pages serves that directory
 // verbatim, so the tests and the live site read byte-identical files with no
@@ -123,12 +123,80 @@ test('the ruleset states the published absolute gates', () => {
   assert.equal(ruleset.programme.minimumGpa, 2.0);
 });
 
-test('the shipped scale is marked UNVERIFIED and says so out loud', () => {
-  assert.notEqual(ruleset.scale.verification, 'verified');
-  assert.match(ruleset.scale.verificationNote, /doğrulanmamıştır/);
+test('the shipped scale is the regulation table, verbatim and cited', () => {
+  // Verbatim from MADDE 32/(3) of the BUÜ undergraduate regulation. If a future
+  // amendment moves a coefficient, this test is the thing that must go red
+  // before a single student sees a wrong average.
+  assert.deepEqual(ruleset.scale.points, {
+    AA: 4.0,
+    BA: 3.5,
+    BB: 3.0,
+    CB: 2.5,
+    CC: 2.0,
+    DC: 1.5,
+    DD: 1.0,
+    FD: 0.5,
+    FF: 0.0,
+    D: 0.0,
+  });
+  assert.equal(ruleset.scale.verification, 'verified');
+
+  const cite = ruleset.scale.verifiedAgainst;
+  assert.match(cite.regulation, /Bursa Uludağ Üniversitesi/);
+  assert.match(cite.article, /MADDE 32/);
+  assert.equal(cite.officialGazette.number, '31250');
+  assert.equal(cite.officialGazette.date, '2020-09-20');
+  assert.match(cite.url, /^https:\/\//);
+  assert.ok(!Number.isNaN(Date.parse(cite.verified_at)));
+});
+
+test('a verified scale no longer attaches a doubt warning to every average', () => {
   const result = computeGpa([{ code: 'A', ects: 5, grade: 'AA' }], ruleset.scale);
   assert.equal(result.gpa, 4);
-  assert.equal(result.warnings.includes(ruleset.scale.verificationNote), true);
+  assert.deepEqual([...result.warnings], []);
+});
+
+test('(D) counts as FF in the average and never earns credit', () => {
+  // MADDE 32/(4)-a: (D) Devamsız is included in the average as (FF).
+  const summary = summarizeProgram(
+    [
+      { code: 'X', ects: 6, grade: 'AA' },
+      { code: 'Y', ects: 6, grade: 'D' },
+    ],
+    ruleset.programme,
+    ruleset.scale,
+  );
+  assert.equal(summary.gpa, 2);
+  assert.equal(summary.earnedEcts, 6);
+  assert.deepEqual(summary.failed.map((f) => f.grade), ['D']);
+});
+
+test('FD is failing, not conditional', () => {
+  assert.equal(ruleset.scale.failing.includes('FD'), true);
+  assert.equal(ruleset.scale.conditional.includes('FD'), false);
+  assert.equal(ruleset.scale.points.FD, 0.5);
+});
+
+test('no fixed 100-point band is invented for any letter grade', () => {
+  // The regulation deliberately defines none: letters come out of relative
+  // assessment. Shipping a band would be a fabrication dressed as precision.
+  const asText = JSON.stringify(ruleset.scale);
+  assert.equal('hundredPointBands' in ruleset.scale, false);
+  assert.equal('bands' in ruleset.scale, false);
+  assert.match(ruleset.scale.letterGradeNote, /üretmez/);
+  assert.equal(/"(AA|BA|BB|CB|CC|DC|DD|FD|FF)"\s*:\s*\[\s*\d+\s*,/.test(asText), false);
+});
+
+test('marks that stay out of the GPA are documented and out of the points table', () => {
+  const points = Object.keys(ruleset.scale.points);
+  for (const mark of ['S', 'E', 'G', 'K', 'M', 'İ']) {
+    assert.ok(ruleset.scale.nonGpaMarks[mark], `${mark} is undocumented`);
+    assert.equal(points.includes(mark), false, `${mark} must not carry a coefficient`);
+  }
+  // And if one is typed in anyway, the engine must refuse it out loud.
+  const result = computeGpa([{ code: 'A', ects: 5, grade: 'M' }], ruleset.scale);
+  assert.equal(result.gpa, null);
+  assert.equal(result.warnings.length, 1);
 });
 
 test('every grade in passing/conditional/failing exists in the points table', () => {

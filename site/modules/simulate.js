@@ -6,11 +6,18 @@
  * no storage, no clock. That is not an aesthetic preference — it is what makes
  * the privacy claim on the site verifiable by reading one file.
  *
- * Second governing rule: the grade-point scale is UNVERIFIED. It follows the
- * common Turkish 4.00 convention, but this project has not confirmed it against
- * the binding regulation. Rather than hide that, every computation that touches
- * the scale carries the warning outward, so the UI cannot render a GPA without
- * also rendering the doubt.
+ * Second governing rule: the grade-point scale is not assumed, it is cited. The
+ * shipped table comes verbatim from MADDE 32/(3) of the BUÜ undergraduate
+ * regulation (RG 20.09.2020/31250), and the data file carries that citation
+ * next to the numbers. The doubt machinery below is therefore not deleted but
+ * inverted: any scale whose `verification` is not `verified` still pushes its
+ * own note into every result, so an unsourced table can never be rendered as a
+ * confident average.
+ *
+ * What stays out on purpose: letter grades. The regulation defines no fixed
+ * 100-point bands — letters fall out of relative assessment against the class
+ * distribution, and this project has no such data. So a score never becomes a
+ * letter here; only a settled letter becomes a coefficient.
  */
 
 export const STATUS = Object.freeze({

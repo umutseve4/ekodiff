@@ -40,13 +40,44 @@ Ortalama hesaplayan araç zaten çok. Bu projenin var olma sebebi başka bir yer
 | Ders kodu MAT1501 → EKO1001 olmuş | 1 silme + 1 ekleme gösterir | `kodu değişti` olarak tek kayıtta eşler |
 | Aynı ada sahip iki ders var, eşleme belirsiz | rastgele birini eşler | **eşlemeyi reddeder** ve ikisini de ayrı gösterir |
 | Harf notu tahmini | uydurur | üretmez — bağıl değerlendirme sınıf dağılımı gerektirir, o veri yok |
-| Not katsayı tablosu doğrulanmamış | sessizce kullanır | `UNVERIFIED` etiketi her ortalamanın yanında görünür |
+| Not katsayı tablosunun kaynağı | sessizce varsayılan bir tablo kullanır | yönetmelik maddesini künyesiyle verinin içine gömer (MADDE 32/(3)) ve kaynaksız her tabloyu uyarıyla işaretler |
 | DC/DD şartlı geçme | statik "geçti" sayar | GANO 2.00'nin altına düşünce **kredinin kaybedildiğini** gösterir |
 
 Son satır bu projenin en özgün parçası. Şartlı geçme dinamiktir: DC/DD ile
 geçilen bir ders yalnızca genel ortalama 2.00 ve üzerindeyken kredi sayılır.
 Yani kazanılmış kredi sonradan *kaybedilebilir* — statik bir transkriptin asla
 göstermediği tam olarak budur.
+
+---
+
+## Not katsayıları nereden geliyor
+
+Tablo varsayılmıyor, **alıntılanıyor.** Kaynak: *Bursa Uludağ Üniversitesi
+Önlisans ve Lisans Eğitim Öğretim Yönetmeliği*, **MADDE 32/(3)** (Resmî Gazete
+20.09.2020 / 31250). Künye `site/data/rules/assessment.json` içinde
+`scale.verifiedAgainst` altında, sayıların hemen yanında durur.
+
+| Harf | Katsayı | Durum |
+|---|---|---|
+| AA | 4.00 | Geçer (Mükemmel) |
+| BA | 3.50 | Geçer (Pekiyi) |
+| BB | 3.00 | Geçer (İyi) |
+| CB | 2.50 | Geçer (Orta) |
+| CC | 2.00 | Geçer (Geçer) |
+| DC | 1.50 | **Koşullu** geçer |
+| DD | 1.00 | **Koşullu** geçer |
+| FD | 0.50 | Başarısız |
+| FF | 0.00 | Başarısız |
+| (D) | 0.00 | Devamsız — ortalamaya **FF olarak** dâhil edilir |
+
+GANO'ya **girmeyen** işaretler — S (Süren Çalışma), E (Eksik), G (Geçer),
+K (Kalır), M (Muaf), İ (İptal) — bilerek katsayı tablosunda değildir. Biri yine
+de girilirse motor onu hesaba katmaz ve nedenini yazılı olarak döndürür.
+
+**Puandan harfe çevirmiyoruz.** Yönetmelik harf notları için sabit bir 100'lük
+aralık tanımlamaz; bağıl değerlendirme uygulanır ve harf, tüm sınıfın
+dağılımına bağlıdır. "70 alırsan BB olur" demek, kesinlik kılığına girmiş bir
+uydurma olurdu. Bir test bu bantların veriye sızmasını engeller.
 
 ---
 
@@ -98,8 +129,8 @@ eksiksiz"** demektir. Farklı `scope`'lu iki snapshot karşılaştırılırsa ra
 ## Yasal ve etik sınırlar
 
 - **Yalnızca kamuya açık kaynaklar:** Bilgi Paketi ders/program sayfaları,
-  akademik takvim, bölüm duyuruları. UNİSİS, transkript, not, devam ve sınıf
-  listesi verisi **kullanılmaz**.
+  akademik takvim, bölüm duyuruları, Resmî Gazete'de yayımlanmış yönetmelik.
+  UNİSİS, transkript, not, devam ve sınıf listesi verisi **kullanılmaz**.
 - **Merkezî veri toplanmaz.** Ad, e-posta, öğrenci numarası, not — hiçbiri
   hiçbir sunucuya gitmez. Girilen her şey tarayıcının `localStorage` alanında
   kalır ve tek düğmeyle geri dönüşsüz silinir.
@@ -107,6 +138,8 @@ eksiksiz"** demektir. Farklı `scope`'lu iki snapshot karşılaştırılırsa ra
 - **Provenance dürüsttür.** Müfredat verisi otomatik toplanmamış, elle
   aktarılmıştır: her snapshot `provenance: "user-transcribed"` taşır. CI bu
   alanın gerçek bir fetch hattı kurulana kadar değiştirilmesini engeller.
+  Not tablosu bunun istisnasıdır: `provenance: "regulation-text"` taşır, çünkü
+  bağlayıcı yönetmelik metninden doğrudan okunmuştur.
 
 ---
 
@@ -131,13 +164,16 @@ olduğu gibi kaydedilmiştir. Doğrusunu yalnızca bölüm başkanlığı ve Ö�
 
 ## Bilinen sınırlamalar
 
-- **Harf notu → katsayı tablosu doğrulanmamıştır** (`UNVERIFIED`). Yaygın Türk
-  4.00 sistemi varsayılmıştır, BUÜ yönetmeliğinden teyit edilmemiştir. Bu yüzden
-  buradaki her ortalama tahminidir ve uyarı her sonuçla birlikte görünür.
 - **Harf notu hesaplanmaz.** BUÜ bağıl değerlendirme kullanır; harf notu tüm
   sınıfın dağılımına bağlıdır. Bu proje o veriyi ne toplar ne tahmin eder.
   Yalnızca mutlak kapılar değerlendirilir: %70 devam, 30 puan final barajı,
   40 puan ham başarı alt sınırı.
+- **Katsayı tablosu doğrulanmıştır, ama zamana karşı değil.** Tablo MADDE
+  32/(3)'ten alındı (bkz. yukarıdaki bölüm); yönetmelik değişirse bu depo bunu
+  kendiliğinden fark etmez. `verified_at` tarihi bu yüzden veride durur.
+- **Bölüme özgü uygulama farkları modellenmemiştir.** Bağıl değerlendirme
+  parametreleri (BDKS/HBAS/YSSL) her yıl Senato tarafından belirlenir; bu
+  değerler burada yoktur.
 - **Önkoşullar modellenmemiştir.** Yalnızca `EKO3101 + EKO3102 → EKO4102` zinciri
   doğrulanabildi. Diğer dersler için "önkoşulu yok" sonucu çıkarılmamalıdır.
 - **Seçmeli havuzu eksiktir.** Yalnızca yazılım/veri odaklı alt küme
@@ -150,7 +186,7 @@ olduğu gibi kaydedilmiştir. Doğrusunu yalnızca bölüm başkanlığı ve Ö�
 ## Geliştirme
 
 ```bash
-npm test                 # 86 test, sıfır bağımlılık
+npm test                 # node:test, sıfır bağımlılık
 npm run smoke            # arayüzü sahte bir DOM üzerinde gerçek verilerle çalıştırır
 npm run verify           # ikisi birden — CI'ın koştuğu komut
 python3 -m http.server -d site 8080   # yerelde çalıştır
@@ -176,9 +212,11 @@ Yeni bir snapshot eklerken:
 
 Testler ağırlıklı olarak **negatif** testlerdir: doğru davranışı değil, yanlış
 iddiada bulunmayı engelleyen davranışı sabitlerler. Beş kasıtlı mutasyonla
-(hayalet kaldırma, şartlı kredinin hep sayılması, `UNVERIFIED` uyarısının
-susturulması, belirsiz recode'un kabul edilmesi, `scope` zorunluluğunun
-kaldırılması) her birinin en az bir testi kırmızıya çevirdiği doğrulanmıştır.
+(hayalet kaldırma, şartlı kredinin hep sayılması, kaynaksız bir tablonun
+uyarısının susturulması, belirsiz recode'un kabul edilmesi, `scope`
+zorunluluğunun kaldırılması) her birinin en az bir testi kırmızıya çevirdiği
+doğrulanmıştır. Katsayı tablosu da artık aynı korumaya sahiptir: dokuz harf
+notundan birinin değeri kayarsa test kırmızıya döner.
 
 ---
 
@@ -188,8 +226,10 @@ Dürüstlük gereği eşikler baştan yazılmıştır:
 
 - Müfredat verisi **12 aydan uzun süre** yeniden doğrulanmadıysa, site
   "bayat veri" uyarısını göstermeli veya depo arşivlenmelidir.
-- `UNVERIFIED` not tablosu **doğrulanamıyorsa**, GANO özelliği kaldırılmalı;
-  yanlış bir ortalama, ortalama olmamasından kötüdür.
+- Not tablosunun **künyesi geçersizleşirse** — yönetmelik değişip
+  `scale.verifiedAgainst` artık yürürlükteki metni göstermiyorsa — tablo derhal
+  yeniden doğrulanmalı, doğrulanamıyorsa GANO özelliği kaldırılmalıdır; yanlış
+  bir ortalama, ortalama olmamasından kötüdür.
 - Üniversite resmî bir sürümlü müfredat API'si yayınlarsa, EkoDiff'in var olma
   sebebi ortadan kalkar. O gün gelirse depo arşivlenir.
 
