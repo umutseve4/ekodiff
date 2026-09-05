@@ -32,8 +32,14 @@ jobs:
       - name: Run tests before publishing
         run: npm run verify
 
+      # `enablement: true` lets the workflow turn Pages on by itself the first
+      # time it runs, instead of failing until someone flips the switch in
+      # Settings. If the token is not allowed to, the manual step is still:
+      # Settings -> Pages -> Source: GitHub Actions.
       - name: Configure Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       # `site/` is uploaded verbatim — no build step, so what CI tested is
       # byte-for-byte what visitors receive.
