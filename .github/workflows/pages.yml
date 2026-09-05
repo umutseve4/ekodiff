@@ -18,6 +18,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      pages_enabled: ${{ steps.pages_state.outputs.enabled }}
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -32,24 +34,51 @@ jobs:
       - name: Run tests before publishing
         run: npm run verify
 
-      # `enablement: true` lets the workflow turn Pages on by itself the first
-      # time it runs, instead of failing until someone flips the switch in
-      # Settings. If the token is not allowed to, the manual step is still:
-      # Settings -> Pages -> Source: GitHub Actions.
+      # Pages cannot be switched on from a workflow: `configure-pages` with
+      # `enablement: true` needs admin rights the default GITHUB_TOKEN does not
+      # have, and it fails hard when Pages is off. That turned every run red for
+      # a reason that has nothing to do with the code, which is exactly the kind
+      # of noise that trains people to ignore a red X.
+      #
+      # So the workflow asks first, and reports instead of failing.
+      - name: Is Pages switched on?
+        id: pages_state
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/${{ github.repository }}/pages" >/dev/null 2>&1; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "### Pages is not switched on yet"
+              echo ""
+              echo "The site passed every test and is ready to publish, but GitHub"
+              echo "Pages has no source configured, so there is nothing to deploy to."
+              echo ""
+              echo "**To publish:** Settings → Pages → Source: **GitHub Actions**,"
+              echo "then re-run this workflow."
+              echo ""
+              echo "This is a one-time manual step; a workflow token is not allowed"
+              echo "to do it."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Configure Pages
+        if: steps.pages_state.outputs.enabled == 'true'
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       # `site/` is uploaded verbatim — no build step, so what CI tested is
       # byte-for-byte what visitors receive.
       - name: Upload site
+        if: steps.pages_state.outputs.enabled == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
     needs: build
+    if: needs.build.outputs.pages_enabled == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
