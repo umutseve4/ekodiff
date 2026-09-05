@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EkoDiff — Müfredat Zaman Makinesi</title>
+<meta name="description" content="Bursa Uludağ Üniversitesi İİBF Ekonometri ders planının sürümleri arasındaki farkı gösteren ve mezuniyet senaryolarını tarayıcıda hesaplayan bağımsız öğrenci projesi.">
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>Δ</text></svg>">
+</head>
+<body>
+
+<a class="skip" href="#main">İçeriğe atla</a>
+
+<header class="hero" id="top">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <p class="eyebrow">Bağımsız öğrenci projesi · v0.1</p>
+    <h1 class="title">
+      <span class="reveal">Eko</span><span class="reveal accent">Diff</span>
+    </h1>
+    <p class="lede reveal">
+      Bir müfredat sessizce değişir. Ders kodu taşınır, AKTS kayar, eski sayfa
+      yayından kalkar — ve geçen yılın planına göre hazırlanmış öğrenci bunu
+      hiçbir yerde göremez. Bu araç o değişimi <strong>sürümler</strong>, ve
+      geri kalanını dürüstçe <em>“bilmiyorum”</em> diye işaretler.
+    </p>
+    <p class="disclaimer reveal" role="note">
+      Bu site bağımsız bir öğrenci projesidir. Bursa Uludağ Üniversitesi
+      tarafından hazırlanmamış, onaylanmamış veya desteklenmemiştir. Resmî bilgi
+      için bölüm başkanlığına ve Öğrenci İşleri’ne başvurun. Buradaki hiçbir
+      sonuç resmî transkript, muafiyet veya mezuniyet kararı yerine geçmez.
+    </p>
+  </div>
+</header>
+
+<main id="main">
+
+  <nav class="tabs" aria-label="Bölümler">
+    <button class="tab" id="tab-diff" role="tab" aria-selected="true" aria-controls="panel-diff">EkoDiff — müfredat farkı</button>
+    <button class="tab" id="tab-time" role="tab" aria-selected="false" aria-controls="panel-time">Zaman Makinesi — senaryolar</button>
+  </nav>
+
+  <!-- ───────────────────────────── EkoDiff ───────────────────────────── -->
+  <section class="panel" id="panel-diff" role="tabpanel" aria-labelledby="tab-diff">
+
+    <h2 class="section-title">İki sürümü karşılaştır</h2>
+    <p class="section-lede">
+      Karşılaştırma <strong>kapsam</strong> (scope) ve <strong>eksiksizlik</strong>
+      (completeness) alanlarına saygı duyar. Kısmi bir sürümde bir dersin
+      görünmemesi, o dersin kaldırıldığı anlamına gelmez — ve bu araç ikisini
+      asla karıştırmaz.
+    </p>
+
+    <div class="controls">
+      <label class="field">
+        <span>Eski sürüm</span>
+        <select id="from-select"></select>
+      </label>
+      <label class="field">
+        <span>Yeni sürüm</span>
+        <select id="to-select"></select>
+      </label>
+    </div>
+
+    <div id="diff-meta" class="meta-grid"></div>
+    <div id="diff-caveats" class="caveats" role="status" aria-live="polite"></div>
+    <div id="diff-summary" class="summary"></div>
+
+    <div class="filter-row" id="diff-filters" role="group" aria-label="Değişim türüne göre filtrele"></div>
+
+    <ul id="diff-entries" class="entries"></ul>
+
+    <details class="sources">
+      <summary>Kaynak künyesi ve bu sürümlerin bilinen sınırları</summary>
+      <div id="diff-sources"></div>
+    </details>
+  </section>
+
+  <!-- ────────────────────────── Zaman Makinesi ───────────────────────── -->
+  <section class="panel" id="panel-time" role="tabpanel" aria-labelledby="tab-time" hidden>
+
+    <h2 class="section-title">Akademik Zaman Makinesi</h2>
+    <p class="section-lede">
+      Notların yalnızca <strong>bu tarayıcıda</strong> durur. Sunucu yok, hesap
+      yok, analitik yok. Hesaplama motoru
+      <code>site/modules/simulate.js</code> içinde sıfır I/O ile yazılmıştır —
+      iddiayı tek dosyayı okuyarak doğrulayabilirsin.
+    </p>
+
+    <div class="privacy-bar">
+      <span id="storage-state">Kayıtlı veri yok.</span>
+      <button type="button" id="wipe" class="danger">Tüm verimi sil</button>
+    </div>
+
+    <h3 class="sub-title">1 · Ders ekle</h3>
+    <form id="add-form" class="controls">
+      <label class="field">
+        <span>Ders</span>
+        <select id="course-select"></select>
+      </label>
+      <label class="field">
+        <span>Not</span>
+        <select id="grade-select"></select>
+      </label>
+      <button type="submit">Ekle</button>
+    </form>
+    <p id="add-error" class="error" role="alert"></p>
+
+    <h3 class="sub-title">2 · Transkriptin</h3>
+    <table class="transcript">
+      <caption class="visually-hidden">Girdiğin dersler, AKTS'leri ve notları</caption>
+      <thead>
+        <tr><th scope="col">Kod</th><th scope="col">Ders</th><th scope="col">AKTS</th><th scope="col">Not</th><th scope="col"><span class="visually-hidden">İşlem</span></th></tr>
+      </thead>
+      <tbody id="transcript-body"></tbody>
+    </table>
+    <p id="transcript-empty" class="muted">Henüz ders eklemedin.</p>
+
+    <h3 class="sub-title">3 · Durum</h3>
+    <div id="standing" class="standing"></div>
+    <div id="standing-warnings" class="caveats" role="status" aria-live="polite"></div>
+
+    <h3 class="sub-title">4 · Hedef ortalama</h3>
+    <div class="controls">
+      <label class="field">
+        <span>Hedef GANO</span>
+        <input id="target-gpa" type="number" min="0" max="4" step="0.05" value="3.00" inputmode="decimal">
+      </label>
+    </div>
+    <div id="target-result" class="target" role="status" aria-live="polite"></div>
+
+    <h3 class="sub-title">5 · Tek ders senaryosu</h3>
+    <p class="section-lede">
+      Bir dersin notunu değiştirsen ne olurdu? En çok önemsenmesi gereken sonuç
+      ortalamanın kaç puan oynadığı değil, <strong>DC/DD şartlı geçişlerin</strong>
+      sayılmaya devam edip etmediğidir.
+    </p>
+    <form id="whatif-form" class="controls">
+      <label class="field">
+        <span>Ders</span>
+        <select id="whatif-course"></select>
+      </label>
+      <label class="field">
+        <span>Yeni not</span>
+        <select id="whatif-grade"></select>
+      </label>
+    </form>
+    <div id="whatif-result" class="whatif" role="status" aria-live="polite"></div>
+
+    <h3 class="sub-title">6 · Tek ders geçme kapıları</h3>
+    <p class="section-lede">
+      Bu bölüm harf notu <strong>üretmez</strong>. BUÜ bağıl değerlendirme
+      kullanır; harf notu tüm sınıfın dağılımına bağlıdır ve bu proje o veriyi
+      ne toplar ne de tahmin eder. Yalnızca mutlak kapılar değerlendirilir.
+    </p>
+    <form id="gate-form" class="controls">
+      <label class="field"><span>Vize</span><input id="gate-midterm" type="number" min="0" max="100" step="0.5" inputmode="decimal"></label>
+      <label class="field"><span>Final</span><input id="gate-final" type="number" min="0" max="100" step="0.5" inputmode="decimal"></label>
+      <label class="field"><span>Devam %</span><input id="gate-attendance" type="number" min="0" max="100" step="1" inputmode="numeric"></label>
+    </form>
+    <div id="gate-result" class="gate" role="status" aria-live="polite"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>
+    <strong>Veri politikası:</strong> bu site hiçbir kişisel veriyi merkezî
+    olarak toplamaz, iletmez veya saklamaz. Ad, e-posta, öğrenci numarası,
+    transkript ya da not verisi hiçbir sunucuya gitmez; girdiğin her şey yalnızca
+    kendi tarayıcının <code>localStorage</code> alanında kalır ve “Tüm verimi
+    sil” düğmesiyle geri dönüşsüz olarak silinir.
+  </p>
+  <p>
+    <strong>Veri kaynağı:</strong> tüm müfredat verisi kamuya açık BUÜ Bilgi
+    Paketi sayfalarından <em>elle aktarılmıştır</em> (<code>provenance:
+    user-transcribed</code>). Otomatik toplama yapılmamıştır. Her sürüm dosyası
+    kendi kaynak URL'sini ve alınma tarihini taşır.
+  </p>
+  <p>
+    <strong>Bilinen sınır:</strong> harf notu → katsayı tablosu BUÜ
+    yönetmeliğinden doğrulanmamıştır (<code>UNVERIFIED</code>). Bu yüzden
+    buradaki her ortalama tahminidir ve her sonucun yanında bu uyarı görünür.
+  </p>
+  <p class="muted">
+    Kaynak kod: <a href="https://github.com/umutseve4/ekodiff">github.com/umutseve4/ekodiff</a>
+    · MIT lisansı · Bağımsız öğrenci projesi, BUÜ ile ilişkili değildir.
+  </p>
+</footer>
+
+<noscript>
+  <p class="caveats">Bu araç hesaplamayı tamamen tarayıcıda yaptığı için JavaScript olmadan çalışmaz. Verinin sunucuya gitmemesinin bedeli budur.</p>
+</noscript>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
