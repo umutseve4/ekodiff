@@ -1,0 +1,47 @@
+{
+  "ruleset_id": "buu-iibf-ekonometri-2026",
+  "label": "BUÜ İİBF Ekonometri — mutlak değerlendirme kapıları",
+  "source": {
+    "url": "https://uludag.edu.tr/ekonometri",
+    "fetched_at": "2026-09-05T00:00:00Z",
+    "provenance": "user-transcribed",
+    "note": "Bölüm Bilgi Paketi metninden Umut tarafından aktarıldı. Otomatik fetch yapılmadı."
+  },
+  "weights": {
+    "midtermWeight": 0.4,
+    "finalWeight": 0.6
+  },
+  "floors": {
+    "finalExamMinimum": 30,
+    "rawScoreMinimum": 40
+  },
+  "attendance": {
+    "requiredPercent": 70
+  },
+  "relative": {
+    "inclusionThreshold": 20,
+    "note": "Bağıl Değerlendirme Katma Sınırı 20 puandır. Bağıl değerlendirme sınıf dağılımı gerektirir; bu proje dağılım verisi toplamaz ve harf notu üretmez."
+  },
+  "programme": {
+    "requiredEcts": 240,
+    "minimumGpa": 2.0,
+    "note": "Program 240 AKTS ilan ediyor; yarıyıl toplamlarının aritmetiği 241 AKTS veriyor. Bu bir kaynaklar arası uyuşmazlıktır, düzeltilmemiştir."
+  },
+  "scale": {
+    "points": {
+      "AA": 4.0,
+      "BA": 3.5,
+      "BB": 3.0,
+      "CB": 2.5,
+      "CC": 2.0,
+      "DC": 1.5,
+      "DD": 1.0,
+      "FF": 0.0
+    },
+    "passing": ["AA", "BA", "BB", "CB", "CC"],
+    "conditional": ["DC", "DD"],
+    "failing": ["FF"],
+    "verification": "UNVERIFIED",
+    "verificationNote": "Harf notu → katsayı eşlemesi yaygın Türk 4.00 sistemine göre varsayılmıştır; BUÜ yönetmeliğinden doğrulanmamıştır. Buradan çıkan her ortalama tahminidir."
+  }
+}

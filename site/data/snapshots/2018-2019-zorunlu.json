@@ -1,0 +1,22 @@
+{
+  "snapshot_id": "2018-2019-zorunlu",
+  "label": "2018-2019 — Zorunlu dersler (arşiv ders planı, kısmi)",
+  "scope": "BUÜ İİBF Ekonometri lisans programı — zorunlu dersler, 1.–8. yarıyıl",
+  "completeness": "partial",
+  "covered_fields": ["title", "semester"],
+  "source": {
+    "url": "https://uludag.edu.tr/ekonometri",
+    "fetched_at": "2026-09-05T00:00:00Z",
+    "provenance": "user-transcribed-archive",
+    "note": "2018-2019 ders planı PDF'inden yalnızca matematik dersleri elde kaldı. Plan artık güncel değildir ve bu snapshot bilerek eksiktir."
+  },
+  "notes": [
+    "Bu snapshot KASITLI olarak eksiktir: yalnızca doğrulanabilen iki ders içerir. Buradaki bir dersin yokluğu, o dersin planda olmadığı anlamına GELMEZ.",
+    "Bu dosyanın var olma sebebi tek bir olgudur: MAT1501/MAT1502 dersleri güncel planda EKO1001/EKO1002 kodlarına taşınmıştır. Ders artık Ekonometri Bölümü'nün kendi dersidir, dolayısıyla muafiyet talebi bölümün kendi komisyonunca değerlendirilir.",
+    "AKTS değerleri doğrulanamadığı için covered_fields dışında bırakılmıştır."
+  ],
+  "courses": [
+    { "code": "MAT1501", "title": "Matematik I", "semester": 1 },
+    { "code": "MAT1502", "title": "Matematik II", "semester": 2 }
+  ]
+}
