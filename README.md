@@ -1,26 +1,29 @@
-# EkoDiff + Akademik Zaman Makinesi
+<h1 align="center">EkoDiff · Akademik Zaman Makinesi</h1>
 
-[![verify](https://github.com/umutseve4/ekodiff/actions/workflows/verify.yml/badge.svg)](https://github.com/umutseve4/ekodiff/actions/workflows/verify.yml)
-[![lisans: MIT](https://img.shields.io/badge/lisans-MIT-informational)](LICENSE)
+<p align="center">
+  <b>Bir müfredat sessizce değişir.</b> Ders kodu taşınır, AKTS kayar, seçmeli havuzu<br>
+  yeniden yazılır, eski sayfa yayından kalkar. Geçen yılın planına göre hazırlanmış<br>
+  öğrenci bu değişimi hiçbir yerde göremez — çünkü kimse müfredatı sürümlemiyor.
+</p>
 
-> **Yayın durumu:** `pages` iş akışının yeşil olması sitenin yayında olduğu
-> anlamına **gelmez**. GitHub Pages kapalıyken testler geçer, dağıtım adımları
-> atlanır ve koşu bir uyarı ile yeşil biter. Yayına almak için tek seferlik bir
-> el işi gerekir: **Settings → Pages → Source: GitHub Actions**, ardından `pages`
-> iş akışını yeniden çalıştırın. Bir iş akışı jetonunun bunu yapmaya yetkisi yok.
+<p align="center">
+  <a href="https://github.com/umutseve4/ekodiff/actions/workflows/verify.yml"><img src="https://github.com/umutseve4/ekodiff/actions/workflows/verify.yml/badge.svg" alt="verify"></a>
+  <img src="https://img.shields.io/badge/ba%C4%9F%C4%B1ml%C4%B1l%C4%B1k-0-FF4D4F?style=flat-square" alt="Sıfır bağımlılık">
+  <img src="https://img.shields.io/badge/AKTS%20uyu%C5%9Fmazl%C4%B1%C4%9F%C4%B1-241%20vs%20240-FF4D4F?style=flat-square" alt="241 vs 240 AKTS">
+</p>
 
-**Bir müfredat sessizce değişir.** Ders kodu taşınır, AKTS kayar, seçmeli havuzu
-yeniden yazılır, eski sayfa yayından kalkar. Geçen yılın planına göre hazırlanmış
-öğrenci bu değişimi hiçbir yerde göremez — çünkü kimse müfredatı sürümlemiyor.
+<p align="center"><b><a href="https://umutseve4.github.io/ekodiff/">▶ Aracı aç</a></b></p>
 
-Bu depo iki şey yapar:
+---
 
-1. **EkoDiff** — Bursa Uludağ Üniversitesi İİBF Ekonometri lisans programının
-   tarihli, kaynak künyeli *sürümlerini* tutar ve iki sürüm arasındaki farkı
-   çıkarır.
-2. **Akademik Zaman Makinesi** — tamamen tarayıcıda çalışan bir senaryo motoru:
-   "şu dersten DC alırsam ne olur", "3.00 hedefi için kalan AKTS'de hangi
-   ortalamayı tutturmam gerekir", "şartlı geçtiğim krediler hâlâ sayılıyor mu".
+## 30 saniyede ne oluyor?
+
+İki şey yapabilirsiniz:
+
+1. **EkoDiff** — Bursa Uludağ Üniversitesi İİBF Ekonometri lisans programının tarihli, kaynak künyeli *sürümlerini* seçip iki sürüm arasındaki farkı çıkarırsınız. Kod taşınması, AKTS kayması, kaldırılan ders — hepsi tek listede.
+2. **Akademik Zaman Makinesi** — tamamen tarayıcıda çalışan senaryo motoru: "şu dersten DC alırsam ne olur", "3.00 hedefi için kalan AKTS'de hangi ortalamayı tutturmam gerekir", "şartlı geçtiğim krediler hâlâ sayılıyor mu".
+
+Hiçbir veri sunucuya gitmez. Girdiğiniz her şey `localStorage`'da kalır ve tek düğmeyle geri dönüşsüz silinir.
 
 > **Bu bağımsız bir öğrenci projesidir.** Bursa Uludağ Üniversitesi tarafından
 > hazırlanmamış, onaylanmamış veya desteklenmemiştir. Resmî bilgi için bölüm
@@ -235,7 +238,15 @@ Dürüstlük gereği eşikler baştan yazılmıştır:
 
 ---
 
-## Lisans
+## Yayın durumu
+
+`pages` iş akışının yeşil olması sitenin yayında olduğu anlamına **gelmez.**
+GitHub Pages kapalıyken testler geçer, dağıtım adımları atlanır ve koşu bir
+uyarı ile yeşil biter. Yayına almak için tek seferlik bir el işi gerekir:
+**Settings → Pages → Source: GitHub Actions**, ardından `pages` iş akışını
+yeniden çalıştırın. Bir iş akışı jetonunun bunu yapmaya yetkisi yok.
+
+---
 
 MIT — bkz. [LICENSE](LICENSE). Müfredat verisinin kendisi BUÜ'ye aittir; bu depo
 yalnızca kamuya açık sayfalardan elle aktarılmış, tarihli ve kaynak künyeli
