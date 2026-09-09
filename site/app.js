@@ -325,10 +325,22 @@ function loadTranscript() {
 
 function saveTranscript() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.transcript));
+    // Bos bir liste kayit degildir. "[]" geri yazmak, hem sayfayi sadece
+    // acmanin hem de "tum verimi sil" dugmesinin arkada bir anahtar
+    // birakmasi demek olurdu; bu, sayfa altindaki vaadin tersidir.
+    if (state.transcript.length === 0) localStorage.removeItem(STORAGE_KEY);
+    else localStorage.setItem(STORAGE_KEY, JSON.stringify(state.transcript));
   } catch {
     /* Private mode or a full quota. The session still works in memory. */
   }
+  renderStorageState();
+}
+
+/* Yalnizca durum satirini tazeler, hicbir sey kaydetmez. Kaydetmek ile
+ * ekrana yazmak ayni fonksiyonda oldugu surece, sadece etiketi tazelemek
+ * isteyen her cagri istemeden depoya da yaziyordu. issue #3 tam olarak
+ * bu karisimdan dogmustu. */
+function renderStorageState() {
   const count = state.transcript.length;
   $('storage-state').textContent = count === 0
     ? 'Kayıtlı veri yok.'
@@ -386,8 +398,9 @@ function setupTimeMachine() {
   });
 
   $('wipe').addEventListener('click', () => {
+    // saveTranscript() bos listede anahtari zaten siler, bu yuzden
+    // anahtari geri diriltebilecek ikinci bir yazma kalmadi.
     state.transcript = [];
-    try { localStorage.removeItem(STORAGE_KEY); } catch { /* nothing to remove */ }
     saveTranscript();
     renderTimeMachine();
   });
@@ -403,7 +416,9 @@ function setupTimeMachine() {
   $('gate-form').addEventListener('submit', (event) => event.preventDefault());
   $('whatif-form').addEventListener('submit', (event) => event.preventDefault());
 
-  saveTranscript();
+  // Acilista yalnizca durum satiri tazelenir. Burada kaydetmek, sayfayi
+  // sadece acmanin bile depoya yazmasi anlamina gelirdi.
+  renderStorageState();
   renderTimeMachine();
   renderGate();
 }
