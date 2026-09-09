@@ -209,6 +209,12 @@ await step('import + boot', async () => {
   await new Promise((r) => setTimeout(r, 60));
 });
 
+await step('booting alone wrote nothing to localStorage', () => {
+  // issue #3: siteyi sadece acmak bir anahtar olusturmamali.
+  const raw = localStorage.getItem('ekodiff.transcript.v1');
+  if (raw !== null) throw new Error(`boot created the key: ${raw}`);
+});
+
 await step('boot loaded data instead of rendering the error banner', () => {
   const banner = document.querySelector('main').children.find((c) => c.className === 'caveats');
   if (banner) throw new Error(`error banner: ${banner.textContent}`);
@@ -321,6 +327,10 @@ await step('eligibility gate', () => {
 
 await step('wipe clears local data', () => {
   $('wipe').fire('click');
+  // issue #3: silme, geride bos bir dizi bile birakmamali. Anahtarin
+  // kendisi durdugu surece "hepsini sil" vaadi karsilanmamis olur.
+  const raw = localStorage.getItem('ekodiff.transcript.v1');
+  if (raw !== null) throw new Error(`wipe left a key behind: ${raw}`);
 });
 
 await step('no off-origin fetch was attempted', () => {
