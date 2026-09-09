@@ -229,11 +229,11 @@ async function run() {
   const emptyHidden = await page.$eval('#transcript-empty', (n) => n.hidden);
   const storageState = flat(await page.locator('#storage-state').innerText());
 
-  // Bilinen sinir: app.js silme sonrasi saveTranscript() cagirdigi icin anahtar
-  // bos bir dizi olarak geri yazilabiliyor. Ders verisinin kalmamasi sarttir;
-  // anahtarin kendisi issue #3'te ayrica izleniyor.
-  check(5, 'Kayitli hicbir ders verisi kalmadi',
-    storedAfter === null || storedAfter === '[]', String(storedAfter).slice(0, 80));
+  // issue #3 kapandi: silme artik anahtarin kendisini de kaldiriyor. Bos bir
+  // dizi geri yazmak da kabul edilmez, cunku sayfa altindaki vaat silmenin
+  // geri alinamaz oldugunu soyluyor.
+  check(5, 'Kayitli anahtarin kendisi de silindi',
+    storedAfter === null, String(storedAfter).slice(0, 80));
   check(5, 'Transkript tablosu bosaldi ve bos mesaji gorunur', rowsAfter === 0 && emptyHidden === false,
     `satir=${rowsAfter} bosMesajGizli=${emptyHidden}`);
   check(5, 'Durum satiri "Kayitli veri yok." diyor', /Kayıtlı veri yok\./.test(storageState), storageState);
@@ -245,8 +245,22 @@ async function run() {
   const rowsReload = await page.$$eval('#transcript-body tr', (n) => n.length);
   const storedReload = await page.evaluate((k) => localStorage.getItem(k), STORAGE_KEY);
   check(5, 'Yenilemeden sonra silinen dersler geri gelmedi',
-    rowsReload === 0 && (storedReload === null || storedReload === '[]'),
+    rowsReload === 0 && storedReload === null,
     `satir=${rowsReload} kayit=${String(storedReload)}`);
+
+  // Temiz bir tarayici baglami: siteyi yalnizca acmak depoya hicbir sey
+  // yazmamalidir. Bunu ayni sayfada olcmek yeterli olmaz, cunku o baglamda
+  // zaten silme yapilmisti.
+  const fresh = await browser.newContext({ viewport: { width: 1280, height: 960 } });
+  const freshPage = await fresh.newPage();
+  await freshPage.goto(BASE, { waitUntil: 'load', timeout: 60000 });
+  await freshPage.waitForSelector('#diff-entries li.entry', { timeout: 30000 });
+  await freshPage.click('#tab-time');
+  await freshPage.waitForSelector('#panel-time:not([hidden])');
+  const freshStored = await freshPage.evaluate((k) => localStorage.getItem(k), STORAGE_KEY);
+  check(5, 'Siteyi sadece acmak tarayiciya hicbir sey yazmadi',
+    freshStored === null, String(freshStored).slice(0, 80));
+  await fresh.close();
 
   /* Tur boyunca gecerli iki sart */
   console.log('\nTur boyunca');

@@ -77,6 +77,22 @@ const MUTATIONS = [
     step: 5,
     why: 'Silme sonrasi durum satiri dogru degilse tur kirmizi yanmalidir.',
   },
+  {
+    id: 'silinen-anahtari-geri-yaz',
+    file: 'app.js',
+    find: '    if (state.transcript.length === 0) localStorage.removeItem(STORAGE_KEY);\n    else localStorage.setItem(STORAGE_KEY, JSON.stringify(state.transcript));',
+    replace: '    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.transcript));',
+    step: 5,
+    why: 'Silme sonrasi anahtari bos dizi olarak geri yazmak yakalanmalidir.',
+  },
+  {
+    id: 'acilista-sessizce-yaz',
+    file: 'app.js',
+    find: '  renderStorageState();\n  renderTimeMachine();\n  renderGate();',
+    replace: '  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.transcript));\n  renderStorageState();\n  renderTimeMachine();\n  renderGate();',
+    step: 5,
+    why: 'Siteyi sadece acmanin depoya sessizce yazmasi yakalanmalidir.',
+  },
 ];
 
 const MIME = {
