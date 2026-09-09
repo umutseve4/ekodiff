@@ -1,0 +1,106 @@
+name: acceptance
+
+# İki soru, iki iş:
+#   mutation : kabul turu gerçekten bir şey ölçüyor mu (çevrimdışı, mutasyonlu kopya)
+#   live     : yayındaki adres bugün doğru davranıyor mu (gerçek Chromium)
+#
+# Playwright bilerek repoya bağımlılık olarak eklenmez. verify.yml,
+# package.json içindeki dependencies ve devDependencies alanlarının boş
+# kalmasını denetliyor; bu yüzden tarayıcı koşum takımı repo dışına kurulur ve
+# yolu PLAYWRIGHT_PATH ile verilir.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'tests/live-acceptance.mjs'
+      - 'tests/acceptance-mutations.mjs'
+      - '.github/workflows/acceptance.yml'
+  pull_request:
+    paths:
+      - 'site/**'
+      - 'tests/live-acceptance.mjs'
+      - 'tests/acceptance-mutations.mjs'
+      - '.github/workflows/acceptance.yml'
+  schedule:
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PLAYWRIGHT_VERSION: 1.49.1
+
+jobs:
+  mutation:
+    name: Tur bir şey ölçüyor mu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Playwright'ı repo dışına kur
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/harness"
+          cd "$RUNNER_TEMP/harness"
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund "playwright@${PLAYWRIGHT_VERSION}"
+          npx --yes "playwright@${PLAYWRIGHT_VERSION}" install --with-deps chromium
+          test -f "$RUNNER_TEMP/harness/node_modules/playwright/index.mjs"
+
+      - name: Repo ağacı temiz kaldı mı
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)" || { git status --porcelain; exit 1; }
+
+      - name: Mutasyon denetimi
+        env:
+          PLAYWRIGHT_PATH: ${{ runner.temp }}/harness/node_modules/playwright/index.mjs
+        run: node tests/acceptance-mutations.mjs
+
+  live:
+    name: Yayındaki site kabul turu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Playwright'ı repo dışına kur
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/harness"
+          cd "$RUNNER_TEMP/harness"
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund "playwright@${PLAYWRIGHT_VERSION}"
+          npx --yes "playwright@${PLAYWRIGHT_VERSION}" install --with-deps chromium
+          test -f "$RUNNER_TEMP/harness/node_modules/playwright/index.mjs"
+
+      - name: Site yayında mı
+        id: published
+        run: |
+          set -euo pipefail
+          code=$(curl -s -o /dev/null -w '%{http_code}' "$URL" || echo 000)
+          echo "http=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" = "200" ]; then
+            echo "yayin=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "yayin=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=Site yayında değil::$URL için HTTP $code döndü, canlı tur atlanıyor"
+          fi
+        env:
+          URL: https://umutseve4.github.io/ekodiff/
+
+      - name: Canlı kabul turu
+        if: steps.published.outputs.yayin == 'true'
+        env:
+          PLAYWRIGHT_PATH: ${{ runner.temp }}/harness/node_modules/playwright/index.mjs
+        run: node tests/live-acceptance.mjs "https://umutseve4.github.io/ekodiff/"
