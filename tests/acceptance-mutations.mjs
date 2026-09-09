@@ -38,6 +38,14 @@ const MUTATIONS = [
     why: 'Yeni kodu gizlersen MAT1501 -> EKO1001 iddiasi cokmelidir.',
   },
   {
+    id: 'bilinmeyeni-eklendi-diye-ilan-et',
+    file: 'modules/diff.js',
+    find: '      kind: fromIsComplete ? CHANGE.ADDED : CHANGE.UNKNOWN_ADDED,',
+    replace: '      kind: CHANGE.ADDED,',
+    step: 1,
+    why: 'Kismi arsivde gorulemeyen dersi "eklendi" diye ilan etmek yakalanmalidir.',
+  },
+  {
     id: 'her-seyi-kesin-ilan-et',
     file: 'app.js',
     find: '  if (report.certain) {',
@@ -158,7 +166,7 @@ for (const mutation of MUTATIONS) {
   if (caught && rightStep) {
     console.log(`  yakalandi (${hits} yerde uygulandi, adim ${mutation.step} kirmizi)`);
   } else {
-    problems.push(`${mutation.id}: ${caught ? 'yanlis adimda yakalandi' : 'HIC yakalanmadi'}`);
+    problems.push(`${mutation.id}: ${caught ? `yanlis adimda yakalandi` : 'HIC yakalanmadi'}`);
     console.log(`::error title=Mutasyon kacti::${mutation.id} (adim ${mutation.step}) tur tarafindan yakalanmadi`);
     console.log(result.out.split('\n').filter((l) => l.includes('FAIL')).map((l) => `    ${l}`).join('\n'));
   }
