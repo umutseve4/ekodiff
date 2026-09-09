@@ -95,26 +95,38 @@ async function run() {
   const banner = await page.$('main > .caveats');
   check(0, 'Veri yuklendi, hata afisi basilmadi', banner === null);
 
-  /* Adim 1: RECODED tek kayit, eksikler UNKNOWN_REMOVED */
+  /* Adim 1: iki RECODED, gorulemeyenler UNKNOWN_ADDED */
   console.log('\nAdim 1 : 2018-2019 zorunlu  ->  2026-2027 zorunlu');
   await page.selectOption('#from-select', '2018-2019-zorunlu');
   await page.selectOption('#to-select', '2026-2027-zorunlu');
   await page.waitForTimeout(250);
 
   const list = await entries(page);
-  const recoded = list.filter((e) => e.kind === 'recoded');
-  const removed = list.filter((e) => e.kind === 'removed');
-  const unknownRemoved = list.filter((e) => e.kind === 'unknown-removed');
+  const byKind = (kind) => list.filter((e) => e.kind === kind);
+  const recoded = byKind('recoded');
+  const removed = byKind('removed');
+  const added = byKind('added');
+  const unknownAdded = byKind('unknown-added');
+  const recodedText = recoded.map((e) => e.text).join(' | ');
 
-  check(1, 'Tam olarak bir ders "kodu degisti" olarak eslesti', recoded.length === 1, `recoded=${recoded.length}`);
-  check(1, 'O kayit MAT1501 -> EKO1001 gosteriyor',
-    recoded.length === 1 && recoded[0].text.includes('MAT1501') && recoded[0].text.includes('EKO1001'),
-    recoded[0] ? recoded[0].text.slice(0, 120) : 'kayit yok');
+  // Arsiv anlik goruntusu bilerek yalnizca iki dersi tasir ve ikisinin de kodu
+  // degismistir: MAT1501 -> EKO1001, MAT1502 -> EKO1002. Eski taraftan
+  // eslesmeyen ders kalmadigi icin "kaldirildi" sorusu hic dogmaz; asil
+  // epistemik sinav ters yondedir: yeni plandaki dersler, kismi bir arsivle
+  // karsilastirildigi icin "eklendi" diye ILAN EDILEMEZ.
+  check(1, 'Iki ders de "kodu degisti" olarak eslesti', recoded.length === 2, `recoded=${recoded.length}`);
+  check(1, 'MAT1501 -> EKO1001 eslesmesi ekranda',
+    recodedText.includes('MAT1501') && recodedText.includes('EKO1001'), recodedText.slice(0, 140));
+  check(1, 'MAT1502 -> EKO1002 eslesmesi ekranda',
+    recodedText.includes('MAT1502') && recodedText.includes('EKO1002'), recodedText.slice(0, 140));
   check(1, 'MAT1501 ayrica silinmis/eklenmis diye ikinci kez listelenmiyor',
     !list.some((e) => e.kind !== 'recoded' && e.text.includes('MAT1501')));
-  check(1, 'Kismi surumde hicbir ders kesin "kaldirildi" denmiyor', removed.length === 0, `removed=${removed.length}`);
-  check(1, 'Gorunmeyen dersler "kaldirildi mi? bilinmiyor" olarak isaretli',
-    unknownRemoved.length > 0, `unknown-removed=${unknownRemoved.length}`);
+  check(1, 'Kismi arsive dayanarak hicbir ders kesin "kaldirildi" denmiyor',
+    removed.length === 0, `removed=${removed.length}`);
+  check(1, 'Kismi arsive dayanarak hicbir ders kesin "eklendi" denmiyor',
+    added.length === 0, `added=${added.length}`);
+  check(1, 'Yeni plandaki dersler "eklendi mi? bilinmiyor" olarak isaretli',
+    unknownAdded.length > 0, `unknown-added=${unknownAdded.length}`);
 
   const caveats1 = flat(await page.locator('#diff-caveats').innerText());
   check(1, 'Kismi veri uyarisi ekranda ve kesinlik dili kullanilmiyor',
@@ -219,7 +231,7 @@ async function run() {
 
   // Bilinen sinir: app.js silme sonrasi saveTranscript() cagirdigi icin anahtar
   // bos bir dizi olarak geri yazilabiliyor. Ders verisinin kalmamasi sarttir;
-  // anahtarin kendisi ayri bir konu olarak issue'da izleniyor.
+  // anahtarin kendisi issue #3'te ayrica izleniyor.
   check(5, 'Kayitli hicbir ders verisi kalmadi',
     storedAfter === null || storedAfter === '[]', String(storedAfter).slice(0, 80));
   check(5, 'Transkript tablosu bosaldi ve bos mesaji gorunur', rowsAfter === 0 && emptyHidden === false,
